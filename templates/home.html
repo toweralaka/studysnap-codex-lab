@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}StudySnap | Your learning starts here{% endblock %}
+{% block content %}
+<section aria-labelledby="welcome-title">
+    <p class="eyebrow">Your space to learn</p>
+    <h1 id="welcome-title">Big ideas.<br>Small study steps.</h1>
+    <p class="intro">Give your learning a home. Start by creating a subject, so you have a place to organize what you want to understand.</p>
+    <div class="actions">
+        <a class="button" href="{% url 'subjects:create' %}">Create your first subject</a>
+        <a class="button secondary" href="{% url 'subjects:list' %}">View subjects</a>
+    </div>
+</section>
+<section aria-labelledby="learning-title">
+    <h2 id="learning-title">Build your learning, one step at a time</h2>
+    <div class="cards">
+        <article class="card">
+            <span class="badge">Available now</span>
+            <h2>Organize your subjects</h2>
+            <p>Create subjects for the topics you want to study and see them all in one place.</p>
+        </article>
+        <article class="card">
+            <span class="badge">Coming later</span>
+            <h2>Capture your notes</h2>
+            <p>Keep learning notes under each subject and mark ideas as understood.</p>
+        </article>
+        <article class="card">
+            <span class="badge">Coming later</span>
+            <h2>Check your understanding</h2>
+            <p>Take simple quizzes and view your learning progress.</p>
+        </article>
+    </div>
+</section>
+{% endblock %}

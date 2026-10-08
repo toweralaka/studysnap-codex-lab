@@ -1,0 +1,11 @@
+{% extends "subjects/base.html" %}
+{% block title %}Create subject | StudySnap{% endblock %}
+{% block content %}
+<h1>Create subject</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create subject</button>
+</form>
+<p><a href="{% url 'subjects:list' %}">Cancel</a></p>
+{% endblock %}
