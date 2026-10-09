@@ -5,7 +5,7 @@
 <p><a href="{% url 'subjects:create' %}">Create subject</a></p>
 <ul>
     {% for subject in subjects %}
-    <li>{{ subject.name }}</li>
+    <li><a href="{% url 'subjects:note_list' subject.pk %}">{{ subject.name }}</a></li>
     {% empty %}
     <li>No subjects yet. Create your first subject to get started.</li>
     {% endfor %}

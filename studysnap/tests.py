@@ -18,7 +18,7 @@ class HomePageTests(SimpleTestCase):
     def test_planned_features_are_labeled(self):
         response = self.client.get(reverse("home"))
         self.assertContains(response, "Available now")
-        self.assertContains(response, "Coming later", count=2)
+        self.assertContains(response, "Coming later", count=1)
         self.assertContains(response, "Capture your notes")
         self.assertContains(response, "Check your understanding")
 

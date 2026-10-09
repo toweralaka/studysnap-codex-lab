@@ -1,0 +1,14 @@
+{% extends "subjects/base.html" %}
+{% block title %}Notes | StudySnap{% endblock %}
+{% block content %}
+<h1>{{ subject.name }}</h1>
+<p><a href="{% url 'subjects:note_create' subject.pk %}">Create note</a></p>
+<ul>
+{% for note in notes %}
+<li><a href="{% url 'subjects:note_detail' subject.pk note.pk %}">{{ note.title }}</a></li>
+{% empty %}
+<li>No notes yet.</li>
+{% endfor %}
+</ul>
+<p><a href="{% url 'subjects:list' %}">Back to subjects</a></p>
+{% endblock %}

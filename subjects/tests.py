@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -6,6 +7,9 @@ from .models import Subject
 
 
 class SubjectModelTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username="alice")
+
     def test_name_is_string_representation(self):
         self.assertEqual(str(Subject(name="Biology")), "Biology")
 
@@ -16,27 +20,31 @@ class SubjectModelTests(TestCase):
         Subject(name="x" * 100).full_clean()
 
     def test_duplicate_names_are_allowed(self):
-        Subject.objects.create(name="Biology")
-        Subject.objects.create(name="Biology")
+        Subject.objects.create(owner=self.user, name="Biology")
+        Subject.objects.create(owner=self.user, name="Biology")
         self.assertEqual(Subject.objects.filter(name="Biology").count(), 2)
 
 
 class SubjectPageTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username="alice")
+        self.client.force_login(self.user)
+
     def test_empty_list_has_create_link(self):
         response = self.client.get(reverse("subjects:list"))
         self.assertContains(response, "No subjects yet")
         self.assertContains(response, reverse("subjects:create"))
 
     def test_list_displays_subjects_alphabetically(self):
-        Subject.objects.create(name="Physics")
-        Subject.objects.create(name="Biology")
+        Subject.objects.create(owner=self.user, name="Physics")
+        Subject.objects.create(owner=self.user, name="Biology")
         response = self.client.get(reverse("subjects:list"))
         self.assertEqual(list(response.context["subjects"].values_list("name", flat=True)), ["Biology", "Physics"])
         self.assertContains(response, "Biology")
         self.assertContains(response, "Physics")
 
     def test_subject_names_are_html_escaped(self):
-        Subject.objects.create(name="<script>alert(1)</script>")
+        Subject.objects.create(owner=self.user, name="<script>alert(1)</script>")
         response = self.client.get(reverse("subjects:list"))
         self.assertContains(response, "&lt;script&gt;alert(1)&lt;/script&gt;")
         self.assertNotContains(response, "<script>")
@@ -69,6 +77,7 @@ class SubjectPageTests(TestCase):
 
     def test_create_requires_csrf_and_accepts_valid_token(self):
         client = Client(enforce_csrf_checks=True)
+        client.force_login(self.user)
         url = reverse("subjects:create")
         self.assertEqual(client.post(url, {"name": "Biology"}).status_code, 403)
         self.assertEqual(Subject.objects.count(), 0)

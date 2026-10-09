@@ -24,7 +24,7 @@
         .card { background: white; border: 1px solid #dce4e0; border-radius: .75rem; padding: 1.5rem; }
         .card h2 { font-size: 1.2rem; margin-top: .5rem; }
         .badge { font-size: .8rem; font-weight: 700; color: #435550; }
-        input { display: block; width: 100%; max-width: 420px; padding: .65rem; border: 1px solid #71817b; border-radius: .35rem; font: inherit; }
+        input, textarea { display: block; width: 100%; max-width: 420px; padding: .65rem; border: 1px solid #71817b; border-radius: .35rem; font: inherit; }
         .errorlist { color: #a12323; }
         footer { max-width: 960px; margin: auto; padding: 1.2rem; color: #435550; font-size: .9rem; }
     </style>
@@ -35,7 +35,14 @@
             <a class="brand" href="{% url 'home' %}">StudySnap</a>
             <a href="{% url 'subjects:list' %}">Subjects</a>
             <a href="{% url 'subjects:create' %}">Create subject</a>
-        </nav>
+            {% if user.is_authenticated %}
+            <span>{{ user.username }}</span>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log out</button></form>
+        {% else %}
+            <a href="{% url 'login' %}">Log in</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </nav>
     </header>
     <main>{% block content %}{% endblock %}</main>
     <footer>StudySnap · A little learning, every day.</footer>

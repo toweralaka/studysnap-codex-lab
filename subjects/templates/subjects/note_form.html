@@ -1,0 +1,12 @@
+{% extends "subjects/base.html" %}
+{% block title %}Create note | StudySnap{% endblock %}
+{% block content %}
+<h1>Create note</h1>
+<p>Subject: {{ subject.name }}</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create note</button>
+</form>
+<p><a href="{% url 'subjects:note_list' subject.pk %}">Back to notes</a></p>
+{% endblock %}

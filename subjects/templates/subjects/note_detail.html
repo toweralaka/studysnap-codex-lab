@@ -1,0 +1,9 @@
+{% extends "subjects/base.html" %}
+{% block title %}{{ note.title }} | StudySnap{% endblock %}
+{% block content %}
+<h1>{{ note.title }}</h1>
+<p>Subject: {{ subject.name }}</p>
+{{ note.body|linebreaks }}
+<p>Created: {{ note.created_at }} · Updated: {{ note.updated_at }}</p>
+<p><a href="{% url 'subjects:note_list' subject.pk %}">Back to notes</a></p>
+{% endblock %}
